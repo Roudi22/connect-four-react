@@ -51,7 +51,7 @@ const App: React.FC = () => {
     const player1 = new Player(player1Name || "Player 1", "X");
     const player2 = new Player("AI", "O", true);
     const newGame = new Game(player1, player2);
-    // Here you could also set AI difficulty level
+    
     setGame(newGame);
     setGrid(newGame.getBoard());
     setMessage(`${newGame.getCurrentPlayer().name}'s turn`);
