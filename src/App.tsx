@@ -35,29 +35,17 @@ const App: React.FC = () => {
     }
   };
 
-  const handleHumanNamesSubmit = () => {
+  const handleSubmit = (mode: "human" | "ai") => {
     const player1 = new Player(player1Name || "Player 1", "X");
-    const player2 = new Player(player2Name || "Player 2", "O");
+    const player2 = mode === "human" ? new Player(player2Name || "Player 2", "O") : new Player("AI", "O", true);
     const newGame = new Game(player1, player2);
     setGame(newGame);
     setGrid(newGame.getBoard());
     setMessage(`${newGame.getCurrentPlayer().name}'s turn`);
     setIsChoosingNames(false);
-    setLastPlayer1Name(player1Name || "Player 1");
-    setLastPlayer2Name(player2Name || "Player 2");
-  };
-
-  const handleAISubmit = () => {
-    const player1 = new Player(player1Name || "Player 1", "X");
-    const player2 = new Player("AI", "O", true);
-    const newGame = new Game(player1, player2);
-    
-    setGame(newGame);
-    setGrid(newGame.getBoard());
-    setMessage(`${newGame.getCurrentPlayer().name}'s turn`);
     setIsChoosingDifficulty(false);
     setLastPlayer1Name(player1Name || "Player 1");
-    setLastPlayer2Name("AI");
+    setLastPlayer2Name(mode === "human" ? player2Name || "Player 2" : "AI");
   };
 
   const handleCellClick = (col: number) => {
@@ -106,11 +94,11 @@ const App: React.FC = () => {
             value={player2Name}
             onChange={(e) => setPlayer2Name(e.target.value)}
           />
-          <button onClick={handleHumanNamesSubmit}>Start Game</button>
+          <button onClick={() => handleSubmit("human")}>Start Game</button>
         </Popup>
       )}
       {isChoosingDifficulty && (
-        <Popup >
+        <Popup>
           <h2>Enter Player Name and Choose AI Difficulty</h2>
           <input
             type="text"
@@ -140,7 +128,7 @@ const App: React.FC = () => {
               Hard
             </label>
           </div>
-          <button onClick={handleAISubmit}>Start Game</button>
+          <button onClick={() => handleSubmit("ai")}>Start Game</button>
         </Popup>
       )}
       {game && (
@@ -159,6 +147,8 @@ const App: React.FC = () => {
                     setMessage("");
                     setIsGameOver(false);
                     setIsChoosingMode(true);
+                    setLastPlayer1Name("");
+                    setLastPlayer2Name("");
                   }}
                 />
               )}
